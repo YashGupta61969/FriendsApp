@@ -1,16 +1,26 @@
 import React, { useState } from 'react'
-// import {signInWithEmailAndPassword } from 'firebase/auth'
-import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity } from 'react-native'
+import {signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase/firebase'
+import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
 import Ant from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
+import { useDispatch, useSelector } from 'react-redux'
+import { addCurrentUser } from '../redux/slices/usersSlice'
 
 const Login = ({navigation}) => {
   const { width } = useWindowDimensions()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
+
 
   const login = () => {
-    // signInWithEmailAndPassword(auth, email, password).then((data)=>console.log(data)).catch(err=>console.log(err))
+    signInWithEmailAndPassword(auth, email, password)
+    .then((data)=>{
+      dispatch(addCurrentUser(JSON.stringify(data.user)))
+      navigation.navigate('Tab') 
+    })
+    .catch(err=>Alert.alert('Error', err.message))
   }
   return (
     <View style={styles.container}>

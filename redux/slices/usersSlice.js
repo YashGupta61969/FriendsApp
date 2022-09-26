@@ -20,4 +20,4 @@ const usersSlice = createSlice({
 
 export default usersSlice.reducer
 
-export const {addUsers} = usersSlice.actions
+export const {addUsers, addCurrentUser} = usersSlice.actions

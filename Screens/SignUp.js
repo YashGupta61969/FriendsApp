@@ -1,12 +1,26 @@
-import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity } from 'react-native'
+import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Ant from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase/firebase'
+import {useDispatch} from 'react-redux'
+import { addCurrentUser } from '../redux/slices/usersSlice'
 
 const SignUp = ({ navigation }) => {
+  const dispatch = useDispatch()
   const { width } = useWindowDimensions()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const signUp = ()=>{
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(data=>{
+      dispatch(addCurrentUser(JSON.stringify(data.user)))
+      navigation.navigate('Tab')
+    })
+    .catch(err=>Alert.alert("Error", err.message))
+  }
   return (
     <View style={styles.container}>
       <View>
@@ -26,7 +40,7 @@ const SignUp = ({ navigation }) => {
           placeholder='Password'
           value={password}
         />
-        <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.btn} activeOpacity={0.8} onPress={signUp}>
           <Text style={styles.btnText}>Sign Up</Text>
         </TouchableOpacity>
         <Text style={styles.navText}>Already A User  <Text onPress={() => navigation.navigate('Login')} style={{ color: 'black' }}>Log In</Text> </Text>
