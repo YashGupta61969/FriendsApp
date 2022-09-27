@@ -3,24 +3,48 @@ import React, { useState } from 'react'
 import Ant from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../firebase/firebase'
+import { auth, db } from '../firebase/firebase'
 import {useDispatch} from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
+import { doc, setDoc, Timestamp } from 'firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react'
 
 const SignUp = ({ navigation }) => {
   const dispatch = useDispatch()
   const { width } = useWindowDimensions()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
 
   const signUp = ()=>{
     createUserWithEmailAndPassword(auth, email, password)
     .then(data=>{
+      AsyncStorage.setItem('user', JSON.stringify(data.user))
       dispatch(addCurrentUser(JSON.stringify(data.user)))
+      setDoc(doc(db, 'users', data.user.uid ),{
+        uid:data.user.uid,
+        email,
+        name,
+        createdAt:Timestamp.fromDate(new Date())
+      })
       navigation.navigate('Tab')
     })
     .catch(err=>Alert.alert("Error", err.message))
   }
+
+  useEffect(()=>{
+    const getUser = async()=>{
+      const user = await AsyncStorage.getItem('user');
+      dispatch(addCurrentUser(user))
+      const data = JSON.parse(user)
+      if(data){
+        navigation.navigate('Tab')
+      }
+    }
+    getUser()
+  },[])
+  
   return (
     <View style={styles.container}>
       <View>
@@ -28,6 +52,12 @@ const SignUp = ({ navigation }) => {
         <Text style={styles.head}>Sign Up Now.</Text>
       </View>
       <View style={{ ...styles.inputWrapper, width: width - 20 }}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(txt) => setName(txt)}
+          placeholder='Name'
+          value={name}
+        />
         <TextInput
           style={styles.input}
           onChangeText={(txt) => setEmail(txt)}

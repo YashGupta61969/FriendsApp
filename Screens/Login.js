@@ -6,6 +6,9 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react'
+
 
 const Login = ({navigation}) => {
   const { width } = useWindowDimensions()
@@ -22,6 +25,19 @@ const Login = ({navigation}) => {
     })
     .catch(err=>Alert.alert('Error', err.message))
   }
+
+  useEffect(()=>{
+    const getUser = async()=>{
+      const user = await AsyncStorage.getItem('user');
+      dispatch(addCurrentUser(user))
+      const data = JSON.parse(user)
+      if(data){
+        navigation.navigate('Tab')
+      }
+    }
+    getUser()
+  },[])
+
   return (
     <View style={styles.container}>
       <View>
