@@ -6,9 +6,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '../firebase/firebase'
 import {useDispatch} from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
-import { doc, setDoc, Timestamp } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react'
 
 const SignUp = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -18,32 +17,22 @@ const SignUp = ({ navigation }) => {
   const [name, setName] = useState('')
 
   const signUp = ()=>{
+    if(!name.trim()){
+      return Alert.alert('Error 404', 'Name Not Found')
+    }
     createUserWithEmailAndPassword(auth, email, password)
     .then(data=>{
       AsyncStorage.setItem('user', JSON.stringify(data.user))
-      dispatch(addCurrentUser(JSON.stringify(data.user)))
+      dispatch(addCurrentUser(data.user))
       setDoc(doc(db, 'users', data.user.uid ),{
         uid:data.user.uid,
         email,
         name,
-        createdAt:Timestamp.fromDate(new Date())
       })
       navigation.navigate('Tab')
     })
     .catch(err=>Alert.alert("Error", err.message))
   }
-
-  useEffect(()=>{
-    const getUser = async()=>{
-      const user = await AsyncStorage.getItem('user');
-      dispatch(addCurrentUser(user))
-      const data = JSON.parse(user)
-      if(data){
-        navigation.navigate('Tab')
-      }
-    }
-    getUser()
-  },[])
   
   return (
     <View style={styles.container}>
@@ -63,12 +52,15 @@ const SignUp = ({ navigation }) => {
           onChangeText={(txt) => setEmail(txt)}
           placeholder='Email'
           value={email}
+          autoCapitalize={'none'}
         />
         <TextInput
           style={styles.input}
           onChangeText={(txt) => setPassword(txt)}
           placeholder='Password'
           value={password}
+          autoCapitalize={'none'}
+          secureTextEntry={true}
         />
         <TouchableOpacity style={styles.btn} activeOpacity={0.8} onPress={signUp}>
           <Text style={styles.btnText}>Sign Up</Text>

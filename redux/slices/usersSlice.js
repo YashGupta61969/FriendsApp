@@ -13,9 +13,9 @@ const usersSlice = createSlice({
             state.currentUser = payload;
         },
         addUsers:(state,{payload})=>{
-            state.users.push(payload)
+            state.users = payload
         }
-    }
+    },
 })
 
 export default usersSlice.reducer

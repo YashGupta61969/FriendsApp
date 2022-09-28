@@ -1,7 +1,7 @@
 import { View, StatusBar } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Chat from '../Screens/Chats'
+import Chats from '../Screens/Chats'
 import Map from '../Screens/Map'
 import Friends from '../Screens/Friends'
 import IonIcons from 'react-native-vector-icons/Ionicons'
@@ -17,7 +17,7 @@ const TabNavigation = () => {
       headerShown:false,
       tabBarActiveTintColor: '#B12341'
     }}>
-      <Tab.Screen name="Chat" component={Chat} options={{tabBarIcon:({color, size})=>(
+      <Tab.Screen name="Chats" component={Chats} options={{tabBarIcon:({color, size})=>(
         <IonIcons name={'chatbubble-ellipses-outline'} color={color} size={size}/>
       )
       }} />

@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
 import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
 import Ant from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react'
 
 
 const Login = ({navigation}) => {
@@ -16,23 +15,27 @@ const Login = ({navigation}) => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
-
-  const login = () => {
-    signInWithEmailAndPassword(auth, email, password)
-    .then((data)=>{
-      dispatch(addCurrentUser(JSON.stringify(data.user)))
+  const login = async ()=>{
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password)
+      await AsyncStorage.setItem('user', JSON.stringify(user.user))
+      dispatch(addCurrentUser(user.user))
       navigation.navigate('Tab') 
-    })
-    .catch(err=>Alert.alert('Error', err.message))
+    } catch (error) {
+      Alert.alert('Error', error.message)
+    }
+
   }
 
   useEffect(()=>{
     const getUser = async()=>{
       const user = await AsyncStorage.getItem('user');
-      dispatch(addCurrentUser(user))
-      const data = JSON.parse(user)
-      if(data){
-        navigation.navigate('Tab')
+      if(user){
+        const data = JSON.parse(user)
+        dispatch(addCurrentUser(data))
+        if(data){
+          navigation.navigate('Tab')
+        }
       }
     }
     getUser()
@@ -51,12 +54,15 @@ const Login = ({navigation}) => {
           onChangeText={(txt) => setEmail(txt)}
           placeholder='Email'
           value={email}
+          autoCapitalize={'none'}
         />
         <TextInput
           style={styles.input}
           onChangeText={(txt) => setPassword(txt)}
           placeholder='Password'
           value={password}
+          autoCapitalize={'none'}
+          secureTextEntry={true}
         />
         <TouchableOpacity style={styles.btn} activeOpacity={0.8} onPress={login}>
           <Text style={styles.btnText}>Log In</Text>
