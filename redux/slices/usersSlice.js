@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     users:[],
-    currentUser:{}
+    currentUser:{},
+    selectedUser:{}
 }
 
 const usersSlice = createSlice({
@@ -14,10 +15,13 @@ const usersSlice = createSlice({
         },
         addUsers:(state,{payload})=>{
             state.users = payload
+        },
+        seletUser:(state, {payload})=>{
+            state.selectedUser = payload
         }
     },
 })
 
 export default usersSlice.reducer
 
-export const {addUsers, addCurrentUser} = usersSlice.actions
+export const {addUsers, addCurrentUser, seletUser} = usersSlice.actions

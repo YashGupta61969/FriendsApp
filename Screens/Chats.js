@@ -7,13 +7,13 @@ import { useState } from 'react'
 import { signOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch, useSelector } from 'react-redux'
-import {addUsers} from '../redux/slices/usersSlice'
+import {addUsers, seletUser} from '../redux/slices/usersSlice'
 
 const Chats = ({navigation}) => {
   const { width, height } = useWindowDimensions();
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
-  const {users, currentUser} = useSelector(state=>state.users)
+  const {users, currentUser, selectUser} = useSelector(state=>state.users)
 
   useEffect(() => {
     // get realtime updates from firebase
@@ -32,7 +32,6 @@ const Chats = ({navigation}) => {
     }
 
   }, [])
-  console.log(currentUser)
 
   useEffect(()=>{
     auth.onAuthStateChanged((loggedIn)=>{
@@ -48,16 +47,24 @@ const Chats = ({navigation}) => {
       .catch(err=>alert(err.message))
   }
 
+  const selectUserFn = (item)=>{
+    dispatch(seletUser(item))
+    navigation.navigate('Chat')
+  }
+
   const renderUser = ({ item }) => {
     // const user = JSON.parse(currentUser)
       if (item.uid !== currentUser.uid) {
-      return <View style={styles.user}>
+      return <TouchableOpacity
+       activeOpacity={0.5}
+        style={styles.user}
+       onPress={()=>selectUserFn(item)}>
         <Image
           style={styles.userImage}
           source={{ uri: 'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png' }}
         />
         <Text style={styles.userName}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     }
   }
 

@@ -4,6 +4,7 @@ import Login from '../Screens/Login'
 import SignUp from '../Screens/SignUp'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tab from './TabNavigation'
+import Chat from '../Screens/Chat';
 
 
 const StackNavigator = () => {
@@ -21,6 +22,10 @@ const StackNavigator = () => {
             <Stack.Screen
                 name='Tab'
                 component={Tab}
+            />
+            <Stack.Screen
+                name='Chat'
+                component={Chat}
             />
             </Stack.Navigator>
   )
