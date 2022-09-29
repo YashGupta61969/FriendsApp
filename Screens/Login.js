@@ -7,6 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import { useDispatch } from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 
 
 const Login = ({navigation}) => {
@@ -14,7 +15,7 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
-
+  
   const login = async ()=>{
     try {
       const user = await signInWithEmailAndPassword(auth, email, password)
@@ -24,7 +25,15 @@ const Login = ({navigation}) => {
     } catch (error) {
       Alert.alert('Error', error.message)
     }
-
+    
+  }
+  
+  const loginWithGoogle = ()=>{
+    const provider = new GoogleAuthProvider();
+      signInWithPopup(auth,provider).then(res=>{
+        const credential = GoogleAuthProvider.credentialFromResult(res);
+        console.log(credential)
+      }).catch(err=>console.log(err))
   }
 
   useEffect(()=>{
@@ -71,7 +80,7 @@ const Login = ({navigation}) => {
 
         <Text style={{...styles.navText, marginTop:20}}>Or Log In With</Text>
         <View style={{...styles.iconWrapper, width:width-20}}>
-          <Ant name='google' style={styles.icon} size={50}/>
+          <Ant name='google' style={styles.icon} size={50} onPress={loginWithGoogle}/>
           <Entypo name='facebook' style={styles.icon} size={50}/>
         </View>
       </View>

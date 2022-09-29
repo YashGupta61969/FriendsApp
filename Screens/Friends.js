@@ -19,7 +19,7 @@ const Friends = () => {
 
   return (
     <View>
-      <Text style={styles.head}>Your Friends</Text>
+      <Text style={styles.head}>Users</Text>
       <FlatList
       data={users}
       renderItem={renderUser}
