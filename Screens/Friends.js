@@ -1,10 +1,28 @@
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { doc, onSnapshot } from 'firebase/firestore'
+import { db } from '../firebase/firebase'
+import { useState } from 'react'
 
 
 const Friends = () => {
   const {currentUser, users} = useSelector(state=>state.users)
+  const [friends, setFriends] = useState([])
+
+  useEffect(()=>{
+    const refrenceCollection = doc(db,'users',currentUser.uid)
+
+    const unsub = onSnapshot(refrenceCollection, snapshot=>{
+      setFriends(users.filter(element=> snapshot.data().friends.includes(element.uid)))
+    })
+
+    return ()=>{
+      unsub()
+    }
+  },[])
+
   const renderUser = ({ item }) => {
     if (item.id !== currentUser.uid) {
       return <View style={styles.user}>
@@ -19,11 +37,11 @@ const Friends = () => {
 
   return (
     <View>
-      <Text style={styles.head}>Users</Text>
+      <Text style={styles.head}>Friends</Text>
       <FlatList
-      data={users}
+      data={friends}
       renderItem={renderUser}
-      ListEmptyComponent={<Text style={styles.emptyText}>No Users Found</Text>}
+      ListEmptyComponent={<Text style={styles.emptyText}>No Friends Found</Text>}
       />
     </View>
   )
