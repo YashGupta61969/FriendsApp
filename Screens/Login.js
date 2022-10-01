@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
-import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
-import Ant from 'react-native-vector-icons/AntDesign'
-import Entypo from 'react-native-vector-icons/Entypo'
+import { View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
+// import Ant from 'react-native-vector-icons/AntDesign'
+// import Entypo from 'react-native-vector-icons/Entypo'
 import { useDispatch } from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+
 
 
 const Login = ({navigation}) => {
@@ -26,14 +26,6 @@ const Login = ({navigation}) => {
       Alert.alert('Error', error.message)
     }
     
-  }
-  
-  const loginWithGoogle = ()=>{
-    const provider = new GoogleAuthProvider();
-      signInWithPopup(auth,provider).then(res=>{
-        const credential = GoogleAuthProvider.credentialFromResult(res);
-        console.log(credential)
-      }).catch(err=>console.log(err))
   }
 
   useEffect(()=>{
@@ -78,11 +70,11 @@ const Login = ({navigation}) => {
         </TouchableOpacity>
         <Text style={styles.navText}>Don't Have an Account?  <Text onPress={()=>navigation.navigate('SignUp')} style={{color:'black'}}>Sign Up</Text> </Text>
 
-        <Text style={{...styles.navText, marginTop:20}}>Or Log In With</Text>
-        <View style={{...styles.iconWrapper, width:width-20}}>
-          <Ant name='google' style={styles.icon} size={50} onPress={loginWithGoogle}/>
-          <Entypo name='facebook' style={styles.icon} size={50}/>
-        </View>
+        {/* <Text style={{...styles.navText, marginTop:20}}>Or Log In With</Text> */}
+        {/* <View style={{...styles.iconWrapper, width:width-20}}> */}
+          {/* <Ant name='google' style={styles.icon} size={50} onPress={loginWithGoogle}/> */}
+          {/* <Entypo name='facebook' style={styles.icon} size={50} onPress={loginWithFacebook}/> */}
+        {/* </View> */}
       </View>
     </View>
   )
@@ -93,7 +85,6 @@ export default Login
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
     justifyContent: 'center',
     backgroundColor: '#FFF'
   },
@@ -134,13 +125,13 @@ const styles = StyleSheet.create({
     color:'#C0C0CB',
     fontSize:15
   },
-  iconWrapper:{
-    flexDirection:'row',
-    justifyContent:'center',
-    marginTop:18,
-    justifySelf:'flex-end'
-  },
-  icon:{
-    marginHorizontal:20
-  }
+  // iconWrapper:{
+  //   flexDirection:'row',
+  //   justifyContent:'center',
+  //   marginTop:18,
+  //   justifySelf:'flex-end'
+  // },
+  // icon:{
+  //   marginHorizontal:20
+  // }
 })

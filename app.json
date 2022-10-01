@@ -24,6 +24,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yashgupta999.FriendsApp",
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyDEhhcZEMWBPlvcPp0NtiLtsEo_keuflbI"
+        }
       }
     },
     "web": {
