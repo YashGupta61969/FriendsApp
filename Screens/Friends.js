@@ -14,8 +14,8 @@ const Friends = () => {
   useEffect(()=>{
     const refrenceCollection = doc(db,'users',currentUser.uid)
 
-    const unsub = onSnapshot(refrenceCollection, snapshot=>{
-      setFriends(users.filter(element=> snapshot.data().friends.includes(element.uid)))
+    const unsub =users && onSnapshot(refrenceCollection, snapshot=>{
+      setFriends(users.filter(element=> snapshot.data().friends && snapshot.data().friends.includes(element.uid)))
     })
 
     return ()=>{
@@ -74,5 +74,13 @@ const styles = StyleSheet.create({
   userName:{
     fontSize:19,
     marginLeft:10
+  },
+  emptyText:{
+    fontSize: 20,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingLeft: 20
   }
 })

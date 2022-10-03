@@ -54,7 +54,7 @@ const Chat = () => {
   return (
     <View style={styles.page}>
 
-{/* Navbar */}
+{/* Header */}
       <View
         style={styles.user}>
         <Image

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
 import { View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
-// import Ant from 'react-native-vector-icons/AntDesign'
-// import Entypo from 'react-native-vector-icons/Entypo'
 import { useDispatch } from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -69,12 +67,6 @@ const Login = ({navigation}) => {
           <Text style={styles.btnText}>Log In</Text>
         </TouchableOpacity>
         <Text style={styles.navText}>Don't Have an Account?  <Text onPress={()=>navigation.navigate('SignUp')} style={{color:'black'}}>Sign Up</Text> </Text>
-
-        {/* <Text style={{...styles.navText, marginTop:20}}>Or Log In With</Text> */}
-        {/* <View style={{...styles.iconWrapper, width:width-20}}> */}
-          {/* <Ant name='google' style={styles.icon} size={50} onPress={loginWithGoogle}/> */}
-          {/* <Entypo name='facebook' style={styles.icon} size={50} onPress={loginWithFacebook}/> */}
-        {/* </View> */}
       </View>
     </View>
   )

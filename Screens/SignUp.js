@@ -1,10 +1,8 @@
 import { StatusBar, View, Text, StyleSheet, TextInput, useWindowDimensions, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
-import Ant from 'react-native-vector-icons/AntDesign'
-import Entypo from 'react-native-vector-icons/Entypo'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '../firebase/firebase'
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addCurrentUser } from '../redux/slices/usersSlice'
 import { doc, setDoc } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,24 +14,24 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
-  const signUp = ()=>{
-    if(!name.trim()){
+  const signUp = () => {
+    if (!name.trim()) {
       return Alert.alert('Error 404', 'Name Not Found')
     }
     createUserWithEmailAndPassword(auth, email, password)
-    .then(data=>{
-      AsyncStorage.setItem('user', JSON.stringify(data.user))
-      dispatch(addCurrentUser(data.user))
-      setDoc(doc(db, 'users', data.user.uid ),{
-        uid:data.user.uid,
-        email,
-        name,
+      .then(data => {
+        AsyncStorage.setItem('user', JSON.stringify(data.user))
+        dispatch(addCurrentUser(data.user))
+        setDoc(doc(db, 'users', data.user.uid), {
+          uid: data.user.uid,
+          email,
+          name,
+        })
+        navigation.navigate('Tab')
       })
-      navigation.navigate('Tab')
-    })
-    .catch(err=>Alert.alert("Error", err.message))
+      .catch(err => Alert.alert("Error", err.message))
   }
-  
+
   return (
     <View style={styles.container}>
       <View>
@@ -66,11 +64,6 @@ const SignUp = ({ navigation }) => {
           <Text style={styles.btnText}>Sign Up</Text>
         </TouchableOpacity>
         <Text style={styles.navText}>Already A User  <Text onPress={() => navigation.navigate('Login')} style={{ color: 'black' }}>Log In</Text> </Text>
-      <Text style={{...styles.navText, marginTop:20}}>Or Sign Up With</Text>
-        <View style={{...styles.iconWrapper, width:width-20}}>
-          <Ant name='google' style={styles.icon} size={50}/>
-          <Entypo name='facebook' style={styles.icon} size={50}/>
-        </View>
       </View>
 
     </View>
@@ -123,13 +116,13 @@ const styles = StyleSheet.create({
     color: '#C0C0CB',
     fontSize: 15
   },
-  iconWrapper:{
-    flexDirection:'row',
-    justifyContent:'center',
-    marginTop:18,
-    justifySelf:'flex-end'
+  iconWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 18,
+    justifySelf: 'flex-end'
   },
-  icon:{
-    marginHorizontal:20
+  icon: {
+    marginHorizontal: 20
   }
 })
