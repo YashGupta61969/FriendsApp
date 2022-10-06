@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     users:[],
     currentUser:{},
-    selectedUser:{}
+    selectedUser:{},
 }
 
 const usersSlice = createSlice({
@@ -18,7 +18,7 @@ const usersSlice = createSlice({
         },
         seletUser:(state, {payload})=>{
             state.selectedUser = payload
-        }
+        },
     },
 })
 
